@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter Developer Portfolio</title>
+
+    <style>
+      :root {
+        --bg: #020617;
+        --card: rgba(255, 255, 255, 0.08);
+        --accent: #38bdf8;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #0f172a, #020617);
+        color: var(--text);
+      }
+
+      /* ---------- NAV ---------- */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 14px 10%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(12px);
+        background: rgba(2, 6, 23, 0.7);
+        z-index: 100;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .profile-img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--accent);
+      }
+
+      nav a {
+        color: var(--text);
+        margin-left: 22px;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      /* ---------- SECTIONS ---------- */
+      section {
+        min-height: 100vh;
+        padding: 120px 10%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      section::after {
+        content: "";
+        height: 1px;
+        width: 100%;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--accent),
+          transparent
+        );
+        margin-top: 80px;
+      }
+
+      h1 {
+        font-size: 3.4rem;
+      }
+      h2 {
+        font-size: 2.6rem;
+        margin-bottom: 20px;
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 780px;
+      }
+
+      .hero span {
+        color: var(--accent);
+      }
+
+      .btn {
+        margin-top: 35px;
+        padding: 15px 32px;
+        background: var(--accent);
+        color: #020617;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* ---------- GRID ---------- */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+      }
+
+      .card-img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 15px;
+      }
+
+      /* ---------- ROTATE CARD ---------- */
+      .rotate-card {
+        height: 300px;
+        background: var(--card);
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 1.2s ease;
+        transform-style: preserve-3d;
+      }
+
+      .rotate-card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 15px;
+      }
+
+      .rotate-card.active {
+        transform: rotateY(360deg);
+      }
+
+      /* ---------- FLIP CARD ---------- */
+      .flip-card {
+        perspective: 1200px;
+        height: 300px;
+      }
+
+      .flip-inner {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.9s ease;
+        transform-style: preserve-3d;
+      }
+
+      .flip-card:hover .flip-inner {
+        transform: rotateY(180deg);
+      }
+
+      .flip-front,
+      .flip-back {
+        position: absolute;
+        inset: 0;
+        background: var(--card);
+        border-radius: 18px;
+        padding: 20px;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .flip-front {
+        justify-content: flex-start;
+      }
+
+      .flip-back {
+        transform: rotateY(180deg);
+        background: linear-gradient(135deg, #38f8d8, #860ee9);
+        color: #020617;
+      }
+
+      /* ---------- CONTACT ---------- */
+      .contact-container {
+        display: flex;
+        gap: 50px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .contact-image-box {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 18px;
+        width: 260px;
+        text-align: center;
+        margin-left: 200px;
+      }
+
+      .contact-image-box img {
+        width: 180px;
+        height: 180px;
+        border-radius: 14px;
+        object-fit: cover;
+        border: 2px solid var(--accent);
+        margin-bottom: 15px;
+      }
+
+      /* ---------- FADE ---------- */
+      .fade {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.9s ease;
+      }
+
+      .fade.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px;
+        color: var(--muted);
+      }
+      /* ---------- ABOUT TOP CONTINUOUS ROTATE CARD ---------- */
+      .about-rotate-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .about-rotate-card {
+        width: 260px;
+        height: 260px;
+        background: var(--card);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transform-style: preserve-3d;
+        animation: aboutSpin 8s linear infinite;
+      }
+
+      @keyframes aboutSpin {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(360deg);
+        }
+      }
+
+      .about-rotate-card img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        margin-bottom: 12px;
+      }
+      /* ---------- END ABOUT TOP CONTINUOUS ROTATE CARD ---------- */
+      .last-rotate-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .last-rotate-card {
+        width: 260px;
+        height: 260px;
+        background: var(--card);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transform-style: preserve-3d;
+        animation: aboutSpin 8s linear infinite;
+        margin-left: 250px;
+        
+        
+      }
+
+      @keyframes aboutSpin {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(360deg);
+        }
+      }
+
+      .last-rotate-card img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        margin-bottom: 12px;
+      }
+      .last-rotate-card:hover {
+  animation-play-state: paused;
+}
+
+      
+        /* ---------- MEDIA QUERIES ---------- */
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.4rem;
+        }
+        nav {
+          padding: 12px 5%;
+        }
+        section {
+          padding: 100px 5%;
+        }
+      }
+    </style>
+  </head>
+ /* ---------- BODY ---------- */
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-left">
+        <img src="prfeshnalmy.png" class="profile-img" />
+        <strong>Flutter Dev</strong>
+      </div>
+      <div>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#languages">Languages</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero fade">
+      <h1>Flutter <span>Developer</span></h1>
+      <p>
+        Building modern mobile apps using Flutter, Firebase, Kotlin & Python.
+      </p>
+      <button class="btn" onclick="go('projects')">Explore My Work</button>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="fade">
+        <div class="about-rotate-wrapper">
+  <div class="about-rotate-card">
+    <img src="flutter.png" alt="Vaibhav">
+  </div>
+</div>
+
+      <h2>About Me</h2>
+      <p>
+      🙏Hay I am a passionate Flutter Developer focused on scalable and user-friendly
+      mobile applications. I enjoy working with Firebase, Kotlin, and Python👁 to
+      build complete mobile solutions.
+      </p>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="fade">
+      <h2>Technical Skills</h2>
+      <div class="grid">
+        <div class="rotate-card">
+          <img src="https://technobrains.io/wp-content/uploads/2021/07/flutter-Featured-Blog-Image2.jpg" />
+          <h3>Flutter</h3>
+        </div>
+        <div class="rotate-card">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa0WAo0TBJaZl9Hxls_DZTgzGb2hk2BT-vew&s"
+            alt="Firebase"
+          />
+          <h3>Firebase</h3>
+        </div>
+        <div class="rotate-card">
+          <img
+            src="https://miro.medium.com/1*b2omuYL3snSMLJfO8wjXrg.png"
+            alt="Kotline"
+          />
+          <h3>Kotlin</h3>
+        </div>
+        <div class="rotate-card">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFpE_CJvPxG2BqjyCT73AxhEq5wEUOGVViIg&s"
+            alt="Python"
+          />
+          <h3>Python</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- LANGUAGES -->
+    <section id="languages" class="fade">
+      <h2>Languages</h2>
+      <div class="grid">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img src="english.png" class="card-img" />
+              <h3>English</h3>
+            </div>
+            <div class="flip-back"><p>Professional</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQouoDC_AaTPemA5neHQ_zSWAR-4a7p1f9eOA&s"
+                class="card-img"
+              />
+              <h3>Hindi</h3>
+            </div>
+            <div class="flip-back"><p>Fluent</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRib8j-Wrnjr8o7DBzDyRFbhuo9SockTmp7oQ&s"
+                class="card-img"
+              />
+              <h3>Marathi</h3>
+            </div>
+            <div class="flip-back"><p>Native</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="fade">
+      <h2>Projects</h2>
+      <div class="grid">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUlx4kd9nIj0J-vCVC06C8R2OJ7mpuvNkDhw&s"
+                class="card-img"
+              />
+              <h3>Todo App</h3>
+            </div>
+            <div class="flip-back"><p>Task management app</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUfw4doEII1z9pTZG6JDRBAK0xGWmBmLNKgw&s"
+                class="card-img"
+              />
+              <h3>Weather App</h3>
+            </div>
+            <div class="flip-back"><p>Live weather API</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqqd-BVL6_uWLdhoBGNMBWFVvEDNGLsmHE9g&s"
+                class="card-img"
+              />
+              <h3>Firebase Login</h3>
+            </div>
+            <div class="flip-back"><p>Secure auth system</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="fade">
+      <h2>Contact</h2>
+      <div class="contact-container">
+        <div>
+          <p>Email: Vaibhavsurpatne123@gmail.com</p>
+          <p>GitHub: github.com/vaibhav23s</p>
+          <p>
+            LinkedIn: https://www.linkedin.com/in/vaibhav-surpatne-5bb169361/
+          </p>
+          <p>Contact: +91 9356446941</p>
+        </div>
+        <div class="last-rotate-wrapper">
+        <div class="last-rotate-card">
+        <img src="secondprop.png" alt="Vaibhav">
+        <h3>Vaibhav Surpatne</h3>
+        <p>(Vaibhav Sonar)</p>
+        <p>Flutter Developer</p>
+        </div>
+        </div>
+
+    </section>
+
+    <footer>© 2025 Flutter Developer Portfolio By Vaibhav Surpatne</footer>
+
+    <script>
+      function go(id) {
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+              entry.target
+                .querySelectorAll(".rotate-card")
+                .forEach((card) => card.classList.add("active"));
+            } else {
+              entry.target
+                .querySelectorAll(".rotate-card")
+                .forEach((card) => card.classList.remove("active"));
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+
+      document
+        .querySelectorAll(".fade")
+        .forEach((section) => observer.observe(section));
+    </script>
+  </body>
+</html>
